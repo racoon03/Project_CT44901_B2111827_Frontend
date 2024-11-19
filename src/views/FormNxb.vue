@@ -1,4 +1,5 @@
 <template>
+    <button @click="goBack" class="btn btn-secondary back-button">← Trở về</button>
     <div class="form-nxb-container">
         <h2>{{ isEditMode ? "Chỉnh sửa Nhà Xuất Bản" : "Thêm Nhà Xuất Bản Mới" }}</h2>
 
@@ -120,5 +121,20 @@ input[type="text"] {
 
 .submit-button:hover {
     background-color: #45a049;
+}
+
+.back-button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 70px;
+    width: 100px;
+    margin-left: 20px;
+}
+
+.back-button:hover {
+    background-color: #5a6268;
 }
 </style>

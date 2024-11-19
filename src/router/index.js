@@ -6,6 +6,10 @@ import FormNxb from "@/views/FormNxb.vue";
 import FormSach from "@/views/FormSach.vue";
 import DocGia from "@/views/DocGia.vue";
 import LoginDg from "@/views/LoginDg.vue";
+import FormEditDg from "@/views/FormEditDg.vue";
+import FormMuonDg from "@/views/FormMuonDg.vue";
+import FormEditPmuon from "@/views/FormEditPmuon.vue";
+import TraSach from "@/views/TraSach.vue";
 
 const routes = [
   {
@@ -64,6 +68,29 @@ const routes = [
     path: "/docgia",
     name: "docgia",
     component: DocGia, // Trang quản lý độc giả
+  },
+  {
+    path: "/docgia/edit/:id",
+    name: "edit-docgia",
+    component: FormEditDg, // Trang chỉnh sửa thông tin độc giả
+    props: true, // Truyền props từ URL
+  },
+  {
+    path: "/docgia/muon/:id",
+    name: "muon-docgia",
+    component: FormMuonDg, // Trang chỉnh sửa thông tin độc giả
+    props: true, // Truyền props từ URL
+  },
+  {
+    path: "/phieumuon/edit/:id",
+    name: "EditPhieuMuon",
+    component: FormEditPmuon,
+    props: true,
+  },
+  {
+    path: "/trasach",
+    name: "trasach",
+    component: TraSach,
   },
 ];
 

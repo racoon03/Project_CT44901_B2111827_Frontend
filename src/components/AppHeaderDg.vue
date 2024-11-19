@@ -1,9 +1,7 @@
 <template>
     <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
-        <router-link to="/" class="navbar-brand">Nhân viên</router-link>
-        <router-link to="/nxb" class="navbar-brand">NXB</router-link>
-        <router-link to="/sach" class="navbar-brand">Sach</router-link>
-        <router-link to="/trasach" class="navbar-brand">Trả Sách</router-link>
+        <router-link to="/docgia" class="navbar-brand">Đọc giả</router-link>
+        <router-link to="/sach" class="navbar-brand">Sách</router-link>
 
         <!-- Nút Đăng Xuất -->
         <button class="btn btn-danger ml-auto" @click="handleLogout">Đăng Xuất</button>

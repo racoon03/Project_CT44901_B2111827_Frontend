@@ -1,6 +1,13 @@
 <template>
-    <div class="login-container mt-5">
-        <h2>Đăng Nhập Độc Giả</h2>
+    <div class="login-container mt-10">
+
+        <!-- Tabs lựa chọn Nhân Viên / Độc Giả -->
+        <div class="login-tabs">
+            <span :class="{ active: docgia }" @click="switchToReader">Đọc Giả</span>
+            <span :class="{ active: !docgia }" @click="switchToEmployee">Nhân Viên</span>
+        </div>
+        <h2>Đăng Nhập {{ docgia ? "Độc Giả" : "Nhân Viên" }}</h2>
+
         <form @submit.prevent="handleLogin">
             <div class="form-group">
                 <label for="dienthoai">Số điện thoại:</label>
@@ -19,6 +26,9 @@
 </template>
 
 <script>
+import DocGiaService from "@/services/docgia.service";
+import NhanVienService from "@/services/nhanvien.service";
+
 export default {
     data() {
         return {
@@ -26,44 +36,91 @@ export default {
                 DienThoai: "", // Lưu trữ số điện thoại nhập vào
                 Password: "", // Lưu trữ mật khẩu nhập vào
             },
+            docgia: true,
             errorMessage: "", // Hiển thị lỗi nếu đăng nhập không thành công
         };
     },
     methods: {
         async handleLogin() {
             try {
-                const response = await fetch("http://localhost:3000/api/docgia/login", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(this.formData),
-                });
+                let user;
+                let role;
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || "Đăng nhập thất bại");
+                if (this.docgia) {
+                    // Gọi hàm login cho Độc Giả
+                    user = await DocGiaService.login(this.formData.DienThoai, this.formData.Password);
+                    role = "docgia";
+                } else {
+                    // Gọi hàm login cho Nhân Viên
+                    user = await NhanVienService.login(this.formData.DienThoai, this.formData.Password);
+                    role = "nhanvien";
                 }
 
-                const user = await response.json();
+                // Lưu ID trả về từ API vào localStorage
+                localStorage.setItem("userId", user._id);
 
-                // Lưu ID của độc giả vào local storage
-                localStorage.setItem("docgiaId", user._id);
-
-                this.$router.push({ name: "docgia" });
-
+                // Kiểm tra role để điều hướng
+                if (role === "nhanvien") {
+                    this.$router.push({ path: "/" }); // Chuyển tới trang chính cho admin
+                } else {
+                    this.$router.push({ name: "docgia" }); // Chuyển tới trang độc giả
+                }
             } catch (error) {
                 this.errorMessage = error.message;
             }
+        },
+        switchToReader() {
+            this.docgia = true;
+            this.resetForm();
+        },
+        switchToEmployee() {
+            this.docgia = false;
+            this.resetForm();
+        },
+        resetForm() {
+            this.formData.DienThoai = "";
+            this.formData.Password = "";
+            this.errorMessage = "";
         },
     },
 };
 </script>
 
 <style scoped>
+/* Tabs lựa chọn Nhân Viên / Độc Giả */
+.login-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.login-tabs span {
+    cursor: pointer;
+    padding-bottom: 5px;
+    position: relative;
+}
+
+.login-tabs span.active {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.login-tabs span.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #007bff;
+}
+
+/* login form  */
 .login-container {
     max-width: 400px;
-    margin: 50px auto;
+    margin: 100px auto;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;

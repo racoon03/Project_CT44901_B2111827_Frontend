@@ -1,35 +1,96 @@
+<template>
+    <div class="app-container">
+        <!-- Nội dung chính -->
+        <header>
+            <AppHeaderDg v-if="role === 'reader'" />
+            <AppHeader v-else-if="role !== 'reader'" />
+            <AppHeader v-else-if="route.name !== 'login'" />
+        </header>
+        <main class="main-content">
+            <router-view />
+        </main>
+        <!-- Footer luôn nằm dưới cùng -->
+        <footer>
+            <AppFooter />
+        </footer>
+    </div>
+</template>
+
 <script>
 import AppHeader from "@/components/AppHeader.vue";
+import AppFooter from "@/components/AppFooter.vue";
+import { useRoute } from "vue-router";
+import AppHeaderDg from "./components/AppHeaderDg.vue";
+import AuthService from "@/services/auth.service";
+
+
 export default {
     components: {
         AppHeader,
+        AppHeaderDg,
+        AppFooter,
+    },
+    data() {
+        return {
+            role: null, // Vai trò người dùng
+        };
+    },
+    setup() {
+        const route = useRoute();
+        return {
+            route,
+        };
+    },
+    methods: {
+        async checkUserRole() {
+            try {
+                const userId = localStorage.getItem("userId");
+                if (!userId) throw new Error("Người dùng chưa đăng nhập.");
+
+                // Gọi API kiểm tra vai trò
+                const role = await AuthService.checkRole(userId);
+                this.role = role;
+            } catch (error) {
+                console.error("Lỗi khi kiểm tra vai trò:", error.message);
+                this.$router.push({ name: "login" });
+            }
+        },
+    },
+    async mounted() {
+        await this.checkUserRole();
     },
 };
 </script>
-<template>
-    <AppHeader />
-    <!-- <div class="container mt-5"> -->
-    <router-view />
-    <!-- </div> -->
-</template>
+
 <style>
-.page {
-    margin: 0px;
-    width: 90%;
+/* Đặt chiều cao toàn bộ trang */
+html,
+body,
+#app {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
 }
 
-.container {
-    width: 100%;
-    padding-left: 0;
-    /* Giảm padding */
-    padding-right: 0;
-    /* Giảm padding */
+/* Container chính của ứng dụng */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
 }
 
-@media (min-width: 1200px) {
-    .container {
-        max-width: none;
-        /* Bỏ giới hạn max-width */
-    }
+/* Phần nội dung chính (chiếm hết khoảng trống còn lại) */
+.main-content {
+    flex: 1;
+    padding: 20px;
+}
+
+/* Footer luôn nằm dưới cùng */
+footer {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    /* padding: 10px; */
 }
 </style>

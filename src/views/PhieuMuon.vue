@@ -8,13 +8,12 @@
             <i class="icon-search">🔍</i>
         </div>
 
-        <!-- Button tạo phiếu mượn mới -->
-        <button @click="createPhieuMuon" class="create-button">Tạo phiếu mượn mới</button>
 
         <!-- Hiển thị danh sách phiếu mượn dưới dạng card -->
         <div class="cards-wrapper">
             <CardMuon v-for="phieu in paginatedPhieuMuons" :key="phieu._id" :ngayMuon="phieu.NgayMuon"
-                :ngayTra="phieu.NgayTra" :tenNguoiMuon="phieu.TenNguoiMuon" :tenSach="phieu.TenSach" />
+                :ngayTra="phieu.NgayTra" :tenNguoiMuon="phieu.TenNguoiMuon" :tenSach="phieu.TenSach"
+                @edit="editPhieuMuon(phieu)" @delete="deletePhieuMuon(phieu._id)" />
         </div>
 
         <!-- Phân trang -->
@@ -69,9 +68,17 @@ export default {
             // Gán danh sách phiếu mượn đã cập nhật vào data
             this.phieuMuons = phieuMuons;
         },
-        createPhieuMuon() {
-            // Điều hướng đến trang tạo phiếu mượn mới hoặc thực hiện logic tạo mới
-            this.$router.push({ name: "CreatePhieuMuon" });
+
+        editPhieuMuon(phieu) {
+            // Điều hướng đến FormEditPmuon và truyền ID phiếu mượn
+            this.$router.push({ name: "EditPhieuMuon", params: { id: phieu._id } });
+        },
+        async deletePhieuMuon(id) {
+            if (confirm("Bạn có chắc chắn muốn xóa phiếu mượn này?")) {
+                await PhieuMuonService.delete(id);
+                await this.fetchPhieuMuons(); // Cập nhật danh sách sau khi xóa
+                window.location.reload();
+            }
         },
         updatePaginatedItems({ start, end }) {
             this.paginatedPhieuMuons = this.filteredPhieuMuons.slice(start, end);

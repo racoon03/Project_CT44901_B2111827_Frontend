@@ -21,7 +21,7 @@
                 <strong>Số Quyển:</strong> {{ soQuyen }}
             </p>
             <!-- Icon edit và delete -->
-            <div class="card-actions">
+            <div class="card-actions" v-if="role !== 'reader'">
                 <i class="icon-edit" @click="$emit('edit')">✏️</i>
                 <i class="icon-delete" @click="$emit('delete')">🗑️</i>
             </div>
@@ -40,6 +40,7 @@ export default {
         donGia: Number,
         maNxb: String,
         soQuyen: Number,
+        role: String, // Thêm prop role
     },
     data() {
         return {
@@ -58,6 +59,7 @@ export default {
         }
     },
 };
+
 </script>
 
 <style scoped>

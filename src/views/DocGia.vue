@@ -1,11 +1,11 @@
 <template>
     <div class="docgia-container mt-5">
-        <h2>Quản lý Phiếu Mượn</h2>
+        <h2 class="title">Phiếu Mượn</h2>
 
         <!-- Nút thông tin cá nhân và mượn sách -->
         <div class="button-group">
-            <button @click="viewPersonalInfo" class="btn btn-info">Thông Tin Cá Nhân</button>
-            <button @click="borrowBook" class="btn btn-success">Mượn Sách</button>
+            <button @click="viewPersonalInfo" class="btn btn-info info">Thông Tin Cá Nhân</button>
+            <button @click="borrowBook" class="btn btn-success borrow">Mượn Sách</button>
         </div>
 
         <!-- Hiển thị danh sách phiếu mượn dưới dạng card -->
@@ -15,7 +15,9 @@
         </div>
 
         <!-- Phân trang -->
-        <Pagination :total-items="phieuMuons.length" :items-per-page="itemsPerPage" v-model:currentPage="currentPage" />
+        <Pagination :itemsPerPage="itemsPerPage" :total-items="phieuMuons.length"
+            @update-items="updatePaginatedItems" />
+
     </div>
 </template>
 
@@ -37,6 +39,7 @@ export default {
             phieuMuons: [], // Danh sách phiếu mượn của độc giả
             tenDocGia: "Không rõ", // Tên độc giả
             itemsPerPage: 6, // Số CardMuon hiển thị trên mỗi trang
+            paginatedPhieuMuons: [], // Danh sách phiếu mượn sau khi phân trang
         };
     },
 
@@ -68,22 +71,22 @@ export default {
             this.paginatedPhieuMuons = this.phieuMuons.slice(start, end);
         },
         viewPersonalInfo() {
-            alert(`Thông tin cá nhân:
-Tên: ${this.tenDocGia}`);
+            // Điều hướng sang trang chỉnh sửa độc giả
+            this.$router.push({ name: "edit-docgia", params: { id: this.id } });
         },
         borrowBook() {
-            alert("Chức năng mượn sách");
+            this.$router.push({ name: "muon-docgia", params: { id: this.id } });
         },
     },
     async mounted() {
-        const docGiaId = localStorage.getItem("docgiaId");
-        if (!docGiaId) {
+        const userId = localStorage.getItem("userId");
+        if (!userId) {
             alert("Vui lòng đăng nhập trước.");
             this.$router.push({ name: "login" });
             return;
         }
 
-        this.id = docGiaId;
+        this.id = userId;
 
         await this.fetchDocGiaInfo();
         await this.fetchPhieuMuons();
@@ -101,5 +104,19 @@ Tên: ${this.tenDocGia}`);
     /* Khoảng cách giữa các card */
     justify-content: space-around;
     /* Căn đều card trên dòng */
+}
+
+.info {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.borrow {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.title {
+    text-align: center;
 }
 </style>

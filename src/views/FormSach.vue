@@ -128,7 +128,7 @@ export default {
 <style scoped>
 .form-sach-container {
     max-width: 600px;
-    margin: auto;
+    margin: 80px auto;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
