@@ -4,15 +4,17 @@
 
         <!-- Khung tìm kiếm -->
         <div class="search-bar">
-            <input type="text" v-model="searchQuery" @input="searchPhieuMuon" placeholder="Tìm kiếm người mượn..." />
+            <input type="text" v-model="searchQuery" @input="searchPhieuMuon"
+                placeholder="Tìm kiếm người mượn hoặc tên sách..." />
             <i class="icon-search">🔍</i>
         </div>
 
 
+
         <!-- Hiển thị danh sách phiếu mượn dưới dạng card -->
         <div class="cards-wrapper">
-            <CardMuon v-for="phieu in paginatedPhieuMuons" :key="phieu._id" :ngayMuon="phieu.NgayMuon"
-                :ngayTra="phieu.NgayTra" :tenNguoiMuon="phieu.TenNguoiMuon" :tenSach="phieu.TenSach"
+            <CardMuon v-for="phieu in paginatedPhieuMuons" :key="phieu._id" :ngayMuon="formatDate(phieu.NgayMuon)"
+                :ngayTra="formatDate(phieu.NgayTra)" :tenNguoiMuon="phieu.TenNguoiMuon" :tenSach="phieu.TenSach"
                 @edit="editPhieuMuon(phieu)" @delete="deletePhieuMuon(phieu._id)" />
         </div>
 
@@ -44,9 +46,12 @@ export default {
     },
     computed: {
         filteredPhieuMuons() {
-            // Lọc danh sách dựa trên tên người mượn
-            return this.phieuMuons.filter((phieu) =>
-                phieu.TenNguoiMuon && phieu.TenNguoiMuon.toLowerCase().includes(this.searchQuery.toLowerCase())
+            return this.phieuMuons.filter(
+                (phieu) =>
+                    (phieu.TenNguoiMuon &&
+                        phieu.TenNguoiMuon.toLowerCase().includes(this.searchQuery.toLowerCase())) ||
+                    (phieu.TenSach &&
+                        phieu.TenSach.toLowerCase().includes(this.searchQuery.toLowerCase()))
             );
         },
     },
@@ -67,6 +72,18 @@ export default {
 
             // Gán danh sách phiếu mượn đã cập nhật vào data
             this.phieuMuons = phieuMuons;
+        },
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString("vi-VN", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+            });
+        },
+        searchPhieuMuon() {
+            // Cập nhật danh sách phân trang mỗi khi tìm kiếm
+            this.updatePaginatedItems({ start: 0, end: this.itemsPerPage });
         },
 
         editPhieuMuon(phieu) {
@@ -109,7 +126,23 @@ export default {
 }
 
 .search-bar {
-    margin: 10px 0 20px;
+    margin: 10px 30px 20px 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.icon-search {
+    font-size: 18px;
+    cursor: pointer;
 }
 
 .cards-wrapper {

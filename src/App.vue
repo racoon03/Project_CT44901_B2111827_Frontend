@@ -1,10 +1,10 @@
 <template>
     <div class="app-container">
         <!-- Nội dung chính -->
-        <header>
+        <header v-if="route.name !== 'login'">
+            <!-- Nếu vai trò là reader, hiển thị AppHeaderDg -->
             <AppHeaderDg v-if="role === 'reader'" />
             <AppHeader v-else-if="role !== 'reader'" />
-            <AppHeader v-else-if="route.name !== 'login'" />
         </header>
         <main class="main-content">
             <router-view />

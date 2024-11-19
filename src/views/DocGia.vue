@@ -107,7 +107,7 @@ export default {
 }
 
 .info {
-    margin-left: 5px;
+    margin-left: 35px;
     margin-right: 5px;
 }
 

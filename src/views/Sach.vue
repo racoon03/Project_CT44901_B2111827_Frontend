@@ -95,6 +95,7 @@ export default {
 
 .create-button {
     margin-bottom: 20px;
+    margin-left: 30px;
     padding: 10px 20px;
     background-color: #4CAF50;
     color: white;

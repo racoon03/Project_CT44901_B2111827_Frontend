@@ -2,8 +2,8 @@
     <div class="return-book-container">
         <h2>Trả Sách</h2>
         <div class="cards-wrapper">
-            <CardMuon v-for="phieu in filteredPhieuMuons" :key="phieu._id" :ngayMuon="phieu.NgayMuon"
-                :ngayTra="phieu.NgayTra" :tenNguoiMuon="phieu.TenNguoiMuon" :tenSach="phieu.TenSach"
+            <CardMuon v-for="phieu in filteredPhieuMuons" :key="phieu._id" :ngayMuon="formatDate(phieu.NgayMuon)"
+                :ngayTra="formatDate(phieu.NgayTra)" :tenNguoiMuon="phieu.TenNguoiMuon" :tenSach="phieu.TenSach"
                 :class="{ 'card-returned': phieu.isReturned }" @click="markAsReturned(phieu)" />
         </div>
     </div>
@@ -55,6 +55,14 @@ export default {
             } catch (error) {
                 console.error("Lỗi khi tải danh sách phiếu mượn:", error);
             }
+        },
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString("vi-VN", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+            });
         },
         isReturned(phieu) {
             const returnedBooks = JSON.parse(localStorage.getItem("returnedBooks")) || [];
