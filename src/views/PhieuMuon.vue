@@ -9,7 +9,9 @@
             <i class="icon-search">🔍</i>
         </div>
 
-
+        <div class="create-docgia">
+            <button @click="createDocGia" class="btn btn-success">Tạo Độc Giả</button>
+        </div>
 
         <!-- Hiển thị danh sách phiếu mượn dưới dạng card -->
         <div class="cards-wrapper">
@@ -81,6 +83,10 @@ export default {
                 year: "numeric",
             });
         },
+        createDocGia() {
+            // Điều hướng đến trang Tạo Độc Giả
+            this.$router.push({ name: "dangkydg" });
+        },
         searchPhieuMuon() {
             // Cập nhật danh sách phân trang mỗi khi tìm kiếm
             this.updatePaginatedItems({ start: 0, end: this.itemsPerPage });
@@ -104,6 +110,12 @@ export default {
     async mounted() {
         await this.fetchPhieuMuons();
         this.updatePaginatedItems({ start: 0, end: this.itemsPerPage });
+        const userId = localStorage.getItem("userId");
+        if (!userId) {
+            alert("Vui lòng đăng nhập trước.");
+            this.$router.push({ name: "login" });
+            return;
+        }
     },
 };
 </script>
@@ -149,5 +161,17 @@ export default {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
+}
+
+.create-docgia {
+    margin: 10px 30px 20px 30px;
+    text-align: left;
+}
+
+.create-docgia .btn-success {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 </style>

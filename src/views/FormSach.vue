@@ -1,5 +1,6 @@
 <!-- FormSach.vue -->
 <template>
+    <button @click="goBack" class="btn btn-secondary back-button">← Trở về</button>
     <div class="form-sach-container">
         <h2>{{ isEditMode ? "Chỉnh sửa Sách" : "Thêm Sách Mới" }}</h2>
 
@@ -99,6 +100,9 @@ export default {
                 alert("Đã xảy ra lỗi khi lấy thông tin sách.");
             }
         },
+        goBack() {
+            this.$router.back(); // Chuyển về trang trước
+        },
         async handleSubmit() {
             try {
                 if (this.isEditMode) {
@@ -128,7 +132,7 @@ export default {
 <style scoped>
 .form-sach-container {
     max-width: 600px;
-    margin: 80px auto;
+    margin: 30px auto;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -180,5 +184,20 @@ select {
 
 .submit-button:hover {
     background-color: #45a049;
+}
+
+.back-button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 70px;
+    width: 100px;
+    margin-left: 20px;
+}
+
+.back-button:hover {
+    background-color: #5a6268;
 }
 </style>

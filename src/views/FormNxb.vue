@@ -71,6 +71,9 @@ export default {
                 alert("Đã xảy ra lỗi khi lưu dữ liệu. Vui lòng thử lại.");
             }
         },
+        goBack() {
+            this.$router.back(); // Chuyển về trang trước
+        },
     },
 };
 </script>

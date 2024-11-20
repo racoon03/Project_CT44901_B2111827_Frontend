@@ -10,6 +10,7 @@ import FormEditDg from "@/views/FormEditDg.vue";
 import FormMuonDg from "@/views/FormMuonDg.vue";
 import FormEditPmuon from "@/views/FormEditPmuon.vue";
 import TraSach from "@/views/TraSach.vue";
+import DangKyDg from "@/views/DangKyDg.vue";
 
 const routes = [
   {
@@ -91,6 +92,12 @@ const routes = [
     path: "/trasach",
     name: "trasach",
     component: TraSach,
+  },
+  {
+    path: "/phieumuon/dangkydg",
+    name: "dangkydg",
+    component: DangKyDg,
+    props: true,
   },
 ];
 

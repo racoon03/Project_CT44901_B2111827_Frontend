@@ -10,8 +10,8 @@
 
         <!-- Hiển thị danh sách phiếu mượn dưới dạng card -->
         <div class="cards-wrapper">
-            <CardMuon v-for="phieu in paginatedPhieuMuons" :key="phieu._id" :ngayMuon="phieu.NgayMuon"
-                :ngayTra="phieu.NgayTra" :tenNguoiMuon="tenDocGia" :tenSach="phieu.TenSach" />
+            <CardMuon v-for="phieu in paginatedPhieuMuons" :key="phieu._id" :ngayMuon="formatDate(phieu.NgayMuon)"
+                :ngayTra="formatDate(phieu.NgayTra)" :tenNguoiMuon="tenDocGia" :tenSach="phieu.TenSach" />
         </div>
 
         <!-- Phân trang -->
@@ -76,6 +76,14 @@ export default {
         },
         borrowBook() {
             this.$router.push({ name: "muon-docgia", params: { id: this.id } });
+        },
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString("vi-VN", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+            });
         },
     },
     async mounted() {

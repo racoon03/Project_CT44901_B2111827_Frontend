@@ -10,7 +10,7 @@
             <router-view />
         </main>
         <!-- Footer luôn nằm dưới cùng -->
-        <footer>
+        <footer v-if="route.name !== 'login'">
             <AppFooter />
         </footer>
     </div>
